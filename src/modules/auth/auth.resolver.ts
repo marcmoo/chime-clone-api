@@ -1,0 +1,20 @@
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { AuthService } from './auth.service';
+import { AuthResponse } from './dto/auth-response';
+import { LoginInput } from './dto/login.input';
+import { SignupInput } from './dto/signup.input';
+
+@Resolver()
+export class AuthResolver {
+  constructor(private readonly authService: AuthService) {}
+
+  @Mutation(() => AuthResponse)
+  login(@Args('loginInput') loginInput: LoginInput): Promise<AuthResponse> {
+    return this.authService.login(loginInput.email, loginInput.password);
+  }
+
+  @Mutation(() => AuthResponse)
+  signup(@Args('signupInput') signupInput: SignupInput): Promise<AuthResponse> {
+    return this.authService.signup(signupInput);
+  }
+}
