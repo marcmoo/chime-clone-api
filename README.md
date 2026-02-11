@@ -1,98 +1,152 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Chime Clone API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+GraphQL backend for the Chime Clone banking app, built with NestJS, TypeORM, and MySQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Authentication** — JWT-based signup/login
+- **Accounts** — Checking and savings accounts with balance tracking
+- **Cards** — Debit and credit builder card management
+- **Transactions** — Deposits, purchases, transfers, ATM withdrawals
+- **Transfer** — Move money between accounts with linked debit/credit transactions
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+| Technology | Purpose |
+|------------|---------|
+| NestJS 11 | Application framework |
+| GraphQL (Apollo) | API layer |
+| TypeORM | Database ORM |
+| MySQL | Database |
+| JWT (Passport) | Authentication |
+| PM2 | Process management |
 
-```bash
-$ npm install
-```
+## Getting Started
 
-## Compile and run the project
+### Prerequisites
+
+- Node.js 20+
+- MySQL 8+
+
+### Installation
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/marcmoo/chime-clone-api.git
+cd chime-clone-api
+npm install
 ```
 
-## Run tests
+### Environment Setup
+
+Create a `.env` file in the project root:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_NAME=chime_clone
+JWT_SECRET=your-secret-key
+JWT_EXPIRATION=7d
+HASH_SALT_ROUNDS=10
+PORT=4000
+CORS_ORIGIN=http://localhost:3000
+```
+
+### Database Setup
 
 ```bash
-# unit tests
-$ npm run test
+# Create the MySQL database
+mysql -u root -p -e "CREATE DATABASE chime_clone;"
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Seed with sample data (also creates tables)
+npm run seed
 ```
 
-## Deployment
+**Seed users:**
+| Email | Password |
+|-------|----------|
+| john@doe.com | doe123 |
+| jane@doe.com | doe123 |
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Running
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Development (with hot reload)
+npm run start:dev
+
+# Production
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+GraphQL Playground available at `http://localhost:4000/graphql` (disabled in production).
 
-## Resources
+## API Overview
 
-Check out a few resources that may come in handy when working with NestJS:
+### Queries
+- `me` — Current authenticated user
+- `myAccounts` — User's accounts with balances
+- `transactions(accountId)` — Transaction history
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Mutations
+- `signup` / `login` — Authentication (returns JWT)
+- `createAccount` — Create checking/savings account
+- `createTransaction` — Create a transaction
+- `transferMoney` — Transfer between accounts
+- `updateTransaction` / `deleteTransaction` — Manage transactions
 
-## Support
+## Project Structure
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+src/
+  modules/
+    auth/           # JWT auth (signup, login, guards)
+    users/          # User entity and resolver
+    accounts/       # Account management
+    cards/          # Card management
+    transactions/   # Transaction CRUD + transfers
+  common/
+    enums/          # AccountType, CardType, TransactionType, etc.
+    guards/         # GqlAuthGuard
+    decorators/     # @CurrentUser()
+  database/
+    seed/           # Database seeding
+```
 
-## Stay in touch
+## Production Deployment
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Server:** Hostinger KVM 2 VPS (193.46.198.236)
+
+### Quick Deploy
+
+```bash
+./deploy-production.sh
+```
+
+### Manual Deploy
+
+```bash
+ssh root@193.46.198.236
+cd /var/www/chime-clone-api
+git pull origin main
+npm install
+npm run build
+cp .env.production .env
+pm2 delete chime-api && pm2 start ecosystem.config.js --env production
+pm2 save
+```
+
+### Server Details
+
+| Component | Value |
+|-----------|-------|
+| Path | `/var/www/chime-clone-api` |
+| PM2 name | `chime-api` |
+| Port | 4000 |
+| Nginx route | `/chime/graphql` |
+| Database | `chime_production` |
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
