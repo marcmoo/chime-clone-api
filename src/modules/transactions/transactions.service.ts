@@ -24,7 +24,8 @@ export class TransactionsService {
     const qb = this.transactionsRepository
       .createQueryBuilder('transaction')
       .where('transaction.accountId = :accountId', { accountId })
-      .orderBy('transaction.transactionDate', 'DESC');
+      .orderBy('transaction.transactionDate', 'DESC')
+      .addOrderBy('transaction.createdAt', 'DESC');
 
     if (filters?.transactionType) {
       qb.andWhere('transaction.transactionType = :transactionType', {
