@@ -19,10 +19,13 @@ export class SeedService {
 
   async seed(): Promise<void> {
     // Clear all tables (respecting FK order)
-    await this.transactionsRepository.delete({});
-    await this.cardsRepository.delete({});
-    await this.accountsRepository.delete({});
-    await this.usersRepository.delete({});
+    const dataSource = this.usersRepository.manager.connection;
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
+    await dataSource.query('TRUNCATE TABLE `transactions`');
+    await dataSource.query('TRUNCATE TABLE `cards`');
+    await dataSource.query('TRUNCATE TABLE `accounts`');
+    await dataSource.query('TRUNCATE TABLE `users`');
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
 
     console.log('Cleared all tables.');
 
