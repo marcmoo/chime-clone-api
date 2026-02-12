@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { join } from 'path';
+import * as express from 'express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +13,8 @@ async function bootstrap() {
     origin: configService.get<string>('CORS_ORIGIN'),
     credentials: true,
   });
+
+  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   app.useGlobalPipes(
     new ValidationPipe({

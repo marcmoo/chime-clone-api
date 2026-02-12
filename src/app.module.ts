@@ -10,6 +10,7 @@ import { AccountsModule } from './modules/accounts/accounts.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { CardsModule } from './modules/cards/cards.module';
 import { SeedModule } from './database/seed/seed.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SeedModule } from './database/seed/seed.module';
     TransactionsModule,
     CardsModule,
     SeedModule,
+    UploadsModule,
   ],
 })
 export class AppModule {}

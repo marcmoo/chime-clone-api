@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
 import { Transaction } from './entities/transaction.entity';
 import { CreateTransactionInput } from './dto/create-transaction.input';
 import { FilterTransactionsInput } from './dto/filter-transactions.input';
@@ -183,11 +185,37 @@ export class TransactionsService {
     return this.transactionsRepository.save(transaction);
   }
 
+  async removeImages(id: string): Promise<Transaction> {
+    const transaction = await this.findById(id);
+    if (!transaction) {
+      throw new NotFoundException('Transaction not found');
+    }
+
+    this.deleteImageFiles(transaction);
+
+    transaction.frontImageUrl = undefined;
+    transaction.backImageUrl = undefined;
+    return this.transactionsRepository.save(transaction);
+  }
+
+  private deleteImageFiles(transaction: Transaction): void {
+    for (const url of [transaction.frontImageUrl, transaction.backImageUrl]) {
+      if (url) {
+        const filePath = join(process.cwd(), url);
+        if (existsSync(filePath)) {
+          unlinkSync(filePath);
+        }
+      }
+    }
+  }
+
   async deleteTransaction(id: string): Promise<boolean> {
     const transaction = await this.findById(id);
     if (!transaction) {
       throw new NotFoundException('Transaction not found');
     }
+
+    this.deleteImageFiles(transaction);
 
     // Reverse balance for this transaction
     await this.accountsService.updateBalance(

@@ -37,6 +37,14 @@ export class Transaction {
   @Column({ nullable: true })
   description?: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  frontImageUrl?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  backImageUrl?: string;
+
   @Field(() => TransactionStatus)
   @Column({ type: 'enum', enum: TransactionStatus, default: TransactionStatus.PENDING })
   status: TransactionStatus;

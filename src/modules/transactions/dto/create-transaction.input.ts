@@ -30,4 +30,14 @@ export class CreateTransactionInput {
   @IsOptional()
   @IsDateString()
   transactionDate?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  frontImageUrl?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  backImageUrl?: string;
 }

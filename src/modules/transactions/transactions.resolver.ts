@@ -59,6 +59,14 @@ export class TransactionsResolver {
     return this.transactionsService.updateTransaction(updateTransactionInput);
   }
 
+  @Mutation(() => Transaction)
+  @UseGuards(GqlAuthGuard)
+  removeTransactionImages(
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<Transaction> {
+    return this.transactionsService.removeImages(id);
+  }
+
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   deleteTransaction(
